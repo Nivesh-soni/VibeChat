@@ -1,5 +1,8 @@
+import { ENV } from "../config/env.config.js";
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import { generateToken } from "../lib/jwt.js";
 import { createUser, findByEmail } from "../services/auth.mongo.js";
-import { generateHash, generateToken } from "../utility/helper.js";
+import { generateHash } from "../utility/helper.js";
 
 const signupUser = async (req, res, next) => {
   const { userName, email, password } = req.body;
@@ -24,6 +27,17 @@ const signupUser = async (req, res, next) => {
         email: newUser.email,
         profilePic: newUser.profilePic,
       });
+
+      try {
+        await sendWelcomeEmail(
+          newUser.email,
+          newUser.userName,
+          ENV.CLIENT_URL,
+        );
+      } catch (error) {
+        console.log("Failed to send welcome email:", error);
+      }
+      
     } else {
       res.status(400).json({ message: "Invalid user data" });
     }
