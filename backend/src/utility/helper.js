@@ -10,7 +10,11 @@ export const verifyHash = async (storedPassword, enteredPassword) => {
 };
 
 export const generateToken = (payload, res) => {
-  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+  const { JWT_SECRET, NODE_ENV } = process.env;
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+  const token = jwt.sign(payload, JWT_SECRET, {
     expiresIn: "7d",
   });
 
@@ -20,7 +24,7 @@ export const generateToken = (payload, res) => {
     sameSite: "strict", // prevent CSRF attacks
     // http://localhost = development : secure = false
     // https://xyz.com = production : secure = true
-    secure: process.env.NODE_ENV === "development" ? false : true,
+    secure: NODE_ENV === "development" ? false : true,
   });
 
   return token;
