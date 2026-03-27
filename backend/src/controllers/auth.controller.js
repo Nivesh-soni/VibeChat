@@ -2,7 +2,7 @@ import { ENV } from "../config/env.config.js";
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { generateToken } from "../lib/jwt.js";
 import { createUser, findByEmail } from "../services/auth.mongo.js";
-import { generateHash } from "../utility/helper.js";
+import { generateHash, verifyHash } from "../utility/helper.js";
 
 const signupUser = async (req, res, next) => {
   const { userName, email, password } = req.body;
@@ -29,30 +29,53 @@ const signupUser = async (req, res, next) => {
       });
 
       try {
-        await sendWelcomeEmail(
-          newUser.email,
-          newUser.userName,
-          ENV.CLIENT_URL,
-        );
+        await sendWelcomeEmail(newUser.email, newUser.userName, ENV.CLIENT_URL);
       } catch (error) {
         console.log("Failed to send welcome email:", error);
       }
-      
     } else {
       res.status(400).json({ message: "Invalid user data" });
     }
   } catch (err) {
-    console.log(`Error in signup controller: ${err}`);
+    console.error(`Error in signup controller: ${err}`);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
 const loginUser = async (req, res, next) => {
-  res.send("Endpoint of Login");
+  const { email, password } = req.body;
+  try {
+    const user = await findByEmail(email);
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const isPasswordCorrect = await verifyHash(user.password, password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = generateToken({ id: user._id }, res);
+    res.status(201).json({
+      id: user._id,
+      userName: user.userName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (err) {
+    console.error(`Error in login controller: ${err}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
-const logoutUser = async (req, res, next) => {
-  res.send("Endpoint of Logout");
+const logoutUser = async (_, res, next) => {
+  const {NODE_ENV} = ENV
+  res.clearCookie("accessToken", {
+    path: "/",
+    httpOnly: true,
+    sameSite: "strict",
+    secure: NODE_ENV === "development" ? false : true,
+  });
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 export const authController = { signupUser, loginUser, logoutUser };
