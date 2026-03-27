@@ -21,3 +21,18 @@ export const signupRules = [
     .withMessage("Password must be at least 6 characters"),
   handleValidation,
 ];
+
+export const loginRules = [
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid Email format")
+    .normalizeEmail(),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters"),
+  handleValidation,
+];

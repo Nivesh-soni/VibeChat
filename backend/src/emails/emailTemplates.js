@@ -17,7 +17,7 @@ export function createWelcomeEmailTemplate(name, clientURL) {
         alt="Messenger Logo"
         style="width: 80px; height: 80px; margin-bottom: 20px; border-radius: 50%; background-color: white; padding: 10px;">
       <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 500;">
-        Welcome to Messenger!
+        Welcome to VibeChat!
       </h1>
     </div>
 
