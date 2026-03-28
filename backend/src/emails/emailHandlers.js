@@ -1,4 +1,4 @@
-import { resendClient, sender } from "../services/email.service.js";
+import { resendClient, sender } from "../config/email.config.js";
 import { createWelcomeEmailTemplate } from "./emailTemplates.js";
 
 export const sendWelcomeEmail = async (email, name, clientURL) => {

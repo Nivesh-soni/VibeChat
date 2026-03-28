@@ -1,8 +1,9 @@
 import { ENV } from "../config/env.config.js";
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
-import { generateToken } from "../lib/jwt.js";
+import { generateToken } from "../services/jwt.service.js";
 import { createUser, findByEmail } from "../services/auth.mongo.js";
 import { generateHash, verifyHash } from "../utility/helper.js";
+import { uploadFile } from "../services/storage.service.js";
 
 const signupUser = async (req, res, next) => {
   const { userName, email, password } = req.body;
@@ -68,7 +69,7 @@ const loginUser = async (req, res, next) => {
 };
 
 const logoutUser = async (_, res, next) => {
-  const {NODE_ENV} = ENV
+  const { NODE_ENV } = ENV;
   res.clearCookie("accessToken", {
     path: "/",
     httpOnly: true,
@@ -78,4 +79,27 @@ const logoutUser = async (_, res, next) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-export const authController = { signupUser, loginUser, logoutUser };
+const updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    if (!profilePic) {
+      return res.status(400).json({ message: "Profile pic is required" });
+    }
+    const userId = req.user._id;
+    const updatedUser = await uploadFile(profilePic, userId);
+
+    res
+      .status(200)
+      .json({ message: "profile pic updated successfully" }, updatedUser);
+  } catch (error) {
+    console.error("Error in update peofile pic:", error);
+    res.status(500).json({ message: "internal server error" });
+  }
+};
+
+export const authController = {
+  signupUser,
+  loginUser,
+  logoutUser,
+  updateProfile,
+};

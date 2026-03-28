@@ -21,3 +21,8 @@ export const generateToken = (payload, res) => {
 
   return token;
 };
+
+export const verifyToken = (token) => {
+  const { JWT_SECRET } = ENV;
+  return jwt.verify(token, JWT_SECRET);
+};
