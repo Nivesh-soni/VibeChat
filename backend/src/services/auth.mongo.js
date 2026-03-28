@@ -13,5 +13,7 @@ export const findUserById = async (id) => {
 };
 
 export const updateProfilePic = async (id, profilePic) => {
-  return await userModel.findByIdAndUpdate(id, profilePic, { new: true });
+  return await userModel
+    .findByIdAndUpdate(id, profilePic, { new: true })
+    .select("-password");
 };
