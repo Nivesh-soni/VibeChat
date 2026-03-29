@@ -1,3 +1,4 @@
+import { findUserById } from "../Db/auth.mongo.js";
 import {
   findContacts,
   findMessages,
@@ -37,6 +38,21 @@ const sendMessage = async (req, res, next) => {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
+    if (!text.trim() && !image) {
+      return res.status(400).json({ message: "Text or Image is Required" });
+    }
+
+    if (senderId.equals(receiverId)) {
+      return res
+        .status(400)
+        .json({ message: "Can not send messages to yourself." });
+    }
+
+    const receiverExists = await findUserById(receiverId)
+    if(!receiverExists){
+      return res.status(404).json({message:"Receiver not found."})
+    }
+    
     let imageUrl;
 
     if (image) {
