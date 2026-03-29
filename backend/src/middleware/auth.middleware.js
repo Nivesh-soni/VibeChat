@@ -1,4 +1,4 @@
-import { findUserById } from "../services/auth.mongo.js";
+import { findUserById } from "../Db/auth.mongo.js";
 import { verifyToken } from "../services/jwt.service.js";
 
 export const protectRoute = async (req, res, next) => {

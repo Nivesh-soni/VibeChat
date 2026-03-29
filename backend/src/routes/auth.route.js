@@ -15,6 +15,10 @@ router.post("/signup", signupRules, authController.signupUser);
 router.post("/login", loginRules, authController.loginUser);
 router.post("/logout", authController.logoutUser);
 
+router.get("/getProfile", protectRoute, (req, res) =>
+  res.status(200).json(req.user),
+);
+
 router.put(
   "/update-profile",
   protectRoute,
@@ -22,7 +26,4 @@ router.put(
   authController.updateProfile,
 );
 
-router.get("/check", protectRoute, (req, res) =>
-  res.status(200).json(req.user),
-);
 export const authRoutes = router;

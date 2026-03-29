@@ -1,7 +1,7 @@
 import { ENV } from "../config/env.config.js";
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { generateToken } from "../services/jwt.service.js";
-import { createUser, findByEmail } from "../services/auth.mongo.js";
+import { createUser, findByEmail } from "../Db/auth.mongo.js";
 import { generateHash, verifyHash } from "../utility/helper.js";
 import { uploadFile } from "../services/storage.service.js";
 
