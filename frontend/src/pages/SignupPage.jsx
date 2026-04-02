@@ -8,15 +8,15 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import signupImage from "../../public/signup.png";
+import signupImage from "/signup.png";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
-    userName: "Bob",
-    email: "bob@example.com",
-    password: "1234",
+    userName: "",
+    email: "",
+    password: "",
   });
 
   const { signUp, isSigningUp } = useAuthStore();

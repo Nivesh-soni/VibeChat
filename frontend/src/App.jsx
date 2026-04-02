@@ -19,7 +19,7 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log(authUser);
+  // console.log(authUser);
 
   const router = createBrowserRouter([
     {
@@ -27,7 +27,7 @@ const App = () => {
       element: authUser ? <ChatPage /> : <Navigate to={"/login"} />,
     },
     {
-      path: "/sign-up",
+      path: "/signup",
       element: !authUser ? <SignupPage /> : <Navigate to={"/"} />,
     },
     {
