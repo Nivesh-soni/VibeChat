@@ -25,10 +25,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center p-3 z-10">
+    <div className="w-full flex items-center justify-center z-10">
       {/* <div className="relative w-full max-w-60xl md:h-[800px] h-[650px]"> */}
       <BorderAnimatedContainer>
-        <div className=" w-full flex flex-col md:flex-row max-w-60xl min-h-[500px]">
+        <div className=" w-full flex flex-col md:flex-row max-w-60xl min-h-[545px]">
           {/* Form cloumn - Left side*/}
           <div className="md:w-1/2 flex items-center justify-center p-8 md:border-r border-slate-600/30">
             <div className="w-full max-w-md">

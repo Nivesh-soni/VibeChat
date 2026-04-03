@@ -90,7 +90,7 @@ const updateProfile = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "profile pic updated successfully" }, updatedUser);
+      .json({ message: "profile pic updated successfully", updatedUser });
   } catch (error) {
     console.error("Error in update peofile pic:", error);
     res.status(500).json({ message: "internal server error" });
