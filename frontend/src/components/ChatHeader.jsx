@@ -19,7 +19,7 @@ const ChatHeader = () => {
 
   return (
     <>
-      <div className="flex rounded-tr-lg justify-between bg-slate-900/90 items-cente border-b border-slate-700/50 max-h-[60px] px-6 flex-1">
+      <div className="flex rounded-tr-lg justify-between bg-slate-900/90 items-cente border-b border-slate-700/50 max-h-15 px-6 flex-1">
         <div className="flex items-center space-x-3">
           <div className="avatar avatar-online">
             <div className="w-10 rounded-full">
