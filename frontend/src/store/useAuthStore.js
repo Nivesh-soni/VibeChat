@@ -20,6 +20,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.get("/auth/getProfile");
       set({ authUser: res.data });
       get().connectSocket()
+      // console.log("Authenticated user:", get().authUser);
     } catch (error) {
       console.log("Error in authCheck", error);
       set({ authUser: null });

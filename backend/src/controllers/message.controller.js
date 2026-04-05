@@ -6,6 +6,7 @@ import {
   findPartners,
   findPartnersMessage,
 } from "../Db/messages.mongo.js";
+import { getReceiverSoketId } from "../services/socket.service.js";
 import { sendImage } from "../services/storage.service.js";
 
 const getAllContacts = async (req, res, next) => {
@@ -66,6 +67,11 @@ const sendMessage = async (req, res, next) => {
       image: imageUrl,
     });
 
+    const receiverSocketID = getReceiverSoketId(receiverId)
+    if (receiverSocketID) {
+      const io = req.app.get("io");
+      io.to(receiverSocketID).emit("newMessage", newMessage);
+    }
     res.status(201).json(newMessage);
   } catch (error) {
     console.error("Error in sendMessage:", error);

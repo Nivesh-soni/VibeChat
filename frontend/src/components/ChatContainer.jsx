@@ -7,15 +7,29 @@ import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
 import MessageInput from "./MessageInput";
 
 const ChatContainer = () => {
-  const { selectedUser, getMessagesByUserId, messages, isMessagesLoading } =
-    useChatStore();
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    messages,
+    isMessagesLoading,
+    subscribeToMessages,
+    unsubscribeToMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   const [text, setText] = useState("");
 
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
-  }, [selectedUser, getMessagesByUserId]);
+    subscribeToMessages();
+
+    return () => unsubscribeToMessages();
+  }, [
+    selectedUser,
+    getMessagesByUserId,
+    subscribeToMessages,
+    unsubscribeToMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -39,10 +53,10 @@ const ChatContainer = () => {
             {messages.map((msg) => (
               <div
                 key={msg._id}
-                className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+                className={`chat ${String(msg.senderId) === String(authUser._id) ? "chat-end" : "chat-start"}`}
               >
                 <div
-                  className={`chat-bubble relative rounded-t-xl ${msg.senderId === authUser._id ? "bg-cyan-600 text-white rounded-bl-xl" : "bg-slate-800 text-slate-200 rounded-br-xl"}`}
+                  className={`chat-bubble relative rounded-t-xl ${String(msg.senderId) === String(authUser._id) ? "bg-cyan-600 text-white rounded-bl-xl" : "bg-slate-800 text-slate-200 rounded-br-xl"}`}
                 >
                   {msg.image && (
                     <img
@@ -54,7 +68,7 @@ const ChatContainer = () => {
                   {msg.text && <p className=""> {msg.text}</p>}
 
                   <p
-                    className={`text-xs mt-1 opacity-75 flex items-center gap-1 ${msg.senderId === authUser._id ? "text-gray-200" : "text-gray-400"}`}
+                    className={`text-xs mt-1 opacity-75 flex items-center gap-1 ${String(msg.senderId) === String(authUser._id) ? "text-gray-200" : "text-gray-400"}`}
                   >
                     {new Date(msg.createdAt).toLocaleTimeString(undefined, {
                       hour: "2-digit",

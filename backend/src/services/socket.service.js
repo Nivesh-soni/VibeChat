@@ -2,6 +2,12 @@ import { Server } from "socket.io";
 import { ENV } from "../config/env.config.js";
 import { socketAuthMiddleware } from "../middleware/socketAuth.middleware.js";
 
+const usersocketMap = {};
+
+export const getReceiverSoketId = (userId) => {
+  return usersocketMap[userId];
+};
+
 export const setupSocket = (server) => {
   const io = new Server(server, {
     cors: {
@@ -12,7 +18,6 @@ export const setupSocket = (server) => {
 
   io.use(socketAuthMiddleware);
 
-  const usersocketMap = {}; 
   io.on("connection", (socket) => {
     console.log("New client connected:", socket?.user?.userName);
     const userId = socket.userId;
