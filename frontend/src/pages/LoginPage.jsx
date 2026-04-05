@@ -13,8 +13,8 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    email: "niveshsoni3@gmail.com",
-    password: "123456",
+    email: "",
+    password: "",
   });
 
   const { login, isLoggingIn } = useAuthStore();
